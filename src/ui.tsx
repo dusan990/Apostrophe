@@ -12,7 +12,7 @@ import { h, JSX, Fragment } from 'preact'
 import { useCallback, useState, useMemo, useEffect } from 'preact/hooks'
 import { emit } from '@create-figma-plugin/utilities'
 import { AddStringsHandler } from './types'
-import mobileStrings from './mobileStrings'
+import * as mobileStrings from './mobileStrings.json'
 import webStrings from './webStrings'
 import styles from './styles.css'
 
@@ -51,7 +51,7 @@ function Plugin() {
   type SearchTerm = string;
   type Results = string[][];
 
-  const data = Object.entries(mobileStrings);
+  const data = Object.entries(mobileStrings.en);
 
   const [searchTerm, setSearchTerm] = useState<SearchTerm>('');;
   const [value, setValue] = useState<string>('')
@@ -76,6 +76,7 @@ function Plugin() {
   }
   
   onmessage = (event) => {
+    console.log(message)
     return setMessage(event.data.pluginMessage)
   }
   
@@ -102,18 +103,14 @@ function Plugin() {
           </div>
         </Fragment>
       ))}
-
-      {/* {rslts?.map(item => (
-        <div>
-          <Text style={style.text}>{item}</Text>
-        </div>
-      ))} */}
       
       <VerticalSpace space="large" />
+
       
       <Button fullWidth onClick={handleAddStrings}>
         Update strings
       </Button>
+      <div>{message}</div>
       
     </Container>
   )

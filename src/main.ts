@@ -1,33 +1,50 @@
 import { loadFontsAsync, once, on, showUI } from '@create-figma-plugin/utilities'
 import { CloseHandler, AddStringsHandler } from './types'
-import mobileStrings from './mobileStrings'
+import * as mobileStrings from './mobileStrings.json'
 import webStrings from './webStrings'
 
 export default function() {
+  const translations:any = mobileStrings.en;
   let array:any = [];
   let count = 0;
   
   on<AddStringsHandler>('SOMETHING', function () {
-    const textNodes = findAllTextNodes(figma.currentPage);
+    function getTextNodesFrom(selection:any) {
+      type BaseNode = TextNode;
+      let nodes = [] as unknown as { name: string };
+
+      function childrenIterator(node) {
+        if (node.children) {
+          node.children.forEach(child => {
+            childrenIterator(child)
+          })
+        } else {
+          if (node.type === 'TEXT') {
+            (nodes as unknown as any[]).push(node)
+            // nodes.push(node)
+            // nodes.push({ id: node.id, characters: node.characters })
+          }
+        }
+      }
+    
+      selection.forEach(item => childrenIterator(item))
+      return nodes
+    }
+    const textNodes = getTextNodesFrom(figma.currentPage.selection)
+
     const targetTextNodes = textNodes.filter((textNode) => {
-  
       async function nodes(textNode:any) {
         await figma.loadFontAsync(textNode.fontName)
-
-        for(let property in mobileStrings) {
+        
+        for(let property in translations) {
           if(`_${property}` === textNode.name) {
-            console.log(property)
-            
-            if(mobileStrings[property] !== textNode.characters) {
+
+            if(translations[property] !== textNode.characters) {
               count = count + 1
               array.push(property)
             }
-            
-            if(count < 1) {
-              return message('No strings to edit');
-            }
 
-            textNode.characters = mobileStrings[property]
+            textNode.characters = translations[property]
           }
         }
 
@@ -42,13 +59,13 @@ export default function() {
     });
 
     
-    figma.currentPage.selection = targetTextNodes;
+    // figma.currentPage.selection = targetTextNodes;
     
-    function findAllTextNodes(pageNode: PageNode): TextNode[] {
-      return pageNode.findAll((node) => {
-        return node.type === 'TEXT';
-      }) as TextNode[];
-    }
+    // function findAllTextNodes(pageNode: PageNode): TextNode[] {
+    //   return pageNode.findAll((node) => {
+    //     return node.type === 'TEXT';
+    //   }) as TextNode[];
+    // }
   })
 
   let message = (msg:string) => {

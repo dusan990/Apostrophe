@@ -2,9 +2,10 @@
   "extends": "@create-figma-plugin/tsconfig",
   "compilerOptions": {
     "typeRoots": ["node_modules/@figma", "node_modules/@types"],
-    // "target": "ES6"
-    "downlevelIteration": true
-    // "isolatedModules": false
+    "target": "ES6",
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,    
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

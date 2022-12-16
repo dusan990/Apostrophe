@@ -1,0 +1,31 @@
+body {
+  background-color: var(--figma-color-bg);
+  color: var(--figma-color-text);
+}
+
+.cont {
+  background-color: red;
+  height: 164px;
+  overflow: auto;
+}
+
+.editor {
+  min-height: 100%;
+  font-size: var(--font-size-12);
+  font-family: var(--font-family-code);
+}
+
+.myinput {
+  border: 1px solid white!important;
+}
+
+.someclass {
+  height: 100px;  
+}
+.key, 
+.text {
+  margin: 0;
+}
+.key {
+  opacity: 0.5;
+}

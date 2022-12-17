@@ -1,4 +1,4 @@
-# React Editor
+# Copy manager
 
 ## Development guide
 

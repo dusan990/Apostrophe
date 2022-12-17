@@ -1,19 +1,27 @@
-import { loadFontsAsync, once, on, showUI } from '@create-figma-plugin/utilities'
-import { CloseHandler, AddStringsHandler } from './types'
+import { useState } from 'react'
+import { JSX } from 'preact'
+import { on, once, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
+import { AddStringsHandler } from './types'
 import * as mobileStrings from './mobileStrings.json'
-import webStrings from './webStrings'
+import styles, { text } from './styles.css'
 
 export default function() {
   const translations:any = mobileStrings.en;
   let array:any = [];
   let count = 0;
   
-  on<AddStringsHandler>('SOMETHING', function () {
+  function handleSubmit (data:any) {
+    console.log(data)
+  }
+  once('SAVE', handleSubmit)
+
+  on<AddStringsHandler>('UPDATEFIGMA', function () {
+
     function getTextNodesFrom(selection:any) {
       type BaseNode = TextNode;
-      let nodes = [] as unknown as { name: string };
+      let nodes:Array<object> = [];
 
-      function childrenIterator(node) {
+      function childrenIterator(node:any) {
         if (node.children) {
           node.children.forEach(child => {
             childrenIterator(child)
@@ -21,17 +29,16 @@ export default function() {
         } else {
           if (node.type === 'TEXT') {
             (nodes as unknown as any[]).push(node)
-            // nodes.push(node)
-            // nodes.push({ id: node.id, characters: node.characters })
           }
         }
       }
     
-      selection.forEach(item => childrenIterator(item))
+      selection.forEach(selectedNode => childrenIterator(selectedNode))
       return nodes
     }
+    
     const textNodes = getTextNodesFrom(figma.currentPage.selection)
-
+    
     const targetTextNodes = textNodes.filter((textNode) => {
       async function nodes(textNode:any) {
         await figma.loadFontAsync(textNode.fontName)
@@ -57,15 +64,6 @@ export default function() {
       array = [];
       nodes(textNode)
     });
-
-    
-    // figma.currentPage.selection = targetTextNodes;
-    
-    // function findAllTextNodes(pageNode: PageNode): TextNode[] {
-    //   return pageNode.findAll((node) => {
-    //     return node.type === 'TEXT';
-    //   }) as TextNode[];
-    // }
   })
 
   let message = (msg:string) => {

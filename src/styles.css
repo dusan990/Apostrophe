@@ -29,3 +29,12 @@ body {
 .key {
   opacity: 0.5;
 }
+
+.json {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.json > div:first-child {
+  width: 100%;
+}

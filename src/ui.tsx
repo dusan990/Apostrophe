@@ -1,24 +1,29 @@
 import {
   Button,
   Container,
+  Inline,
   render,
   VerticalSpace,
   Text,
   Columns,
+  Dropdown,
+  Textbox,
   SearchTextbox,
-  useInitialFocus
+  useInitialFocus,
+  IconHyperlink16,
 } from '@create-figma-plugin/ui'
 import { h, JSX, Fragment } from 'preact'
 import { useCallback, useState, useMemo, useEffect } from 'preact/hooks'
-import { emit } from '@create-figma-plugin/utilities'
-import { AddStringsHandler } from './types'
+import { once, emit, saveSettingsAsync } from '@create-figma-plugin/utilities'
+import { AddStringsHandler, SaveStringsToStorage } from './types'
 import * as mobileStrings from './mobileStrings.json'
-import webStrings from './webStrings'
+import getJsonFile from './fetch'
 import styles from './styles.css'
 
 function Plugin() {
-  var style = {
+  const style = {
     myinput: { 
+      width: '100%',
       border: '1px solid #5b5b5b',
     },
     columns: {
@@ -38,24 +43,26 @@ function Plugin() {
       margin: 0,
       lineHeight: 1.6,
       userSelect: 'text',
+    },
+    json: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '24px',
     }
   };
-
-  const [message, setMessage] = useState('')
-  const handleAddStrings = useCallback(
-    function () {
-      emit<AddStringsHandler>('SOMETHING')
-    },[]
-  )
   
-  type SearchTerm = string;
-  type Results = string[][];
-
   const data = Object.entries(mobileStrings.en);
-
-  const [searchTerm, setSearchTerm] = useState<SearchTerm>('');;
+  const [message, setMessage] = useState('')
   const [value, setValue] = useState<string>('')
   const [results, setResults] = useState<Array<any>>([]);
+  const [jsonValue, setJsonValue] = useState('https://raw.githubusercontent.com/dusan990/Copy-manager/main/src/json.json');
+
+  const handleAddStrings = useCallback(
+    function () {
+      emit<AddStringsHandler>('UPDATEFIGMA')
+    },[]
+  )
   
   const search = () => {
     setResults([])
@@ -64,19 +71,10 @@ function Plugin() {
       if( arr[0].toLowerCase().includes(value.toLowerCase()) || arr[1].toLowerCase().includes(value.toLowerCase()) ) {
         setResults(current => [...current, arr]);
       }
-      // arr.filter(item => {
-      // })
     })
   }
 
-  function handleInput(event: JSX.TargetedEvent<HTMLInputElement>) {
-    const newValue = event.currentTarget.value
-    setSearchTerm(value)
-    setValue(newValue)
-  }
-  
   onmessage = (event) => {
-    console.log(message)
     return setMessage(event.data.pluginMessage)
   }
   
@@ -84,15 +82,25 @@ function Plugin() {
     <Container space="large">
       <VerticalSpace space="large" />
 
-      <SearchTextbox 
-        onInput={e => setValue(e.currentTarget.value)}
-        value={value}
-        style={style.myinput}
-      />
+      <div className={styles.json}>
+        <Textbox placeholder="JSON file link" value={jsonValue} icon={<IconHyperlink16 />} />
+        <Button onClick={(e:any) => getJsonFile(jsonValue)} secondary>Upload</Button>
+      </div>
+      {/* <Dropdown disabled onChange={handleDropdown} options={dropdownOption} value="foo" /> */}
+      
+      <VerticalSpace space="large" />
 
-      <Button class="hello" onClick={search}>
-        Search
-      </Button>
+      <div className={styles.json}>
+        <SearchTextbox 
+          onInput={e => setValue(e.currentTarget.value)}
+          value={value}
+          style={style.myinput}
+        />
+
+        <Button class="hello" onClick={search}>
+          Search
+        </Button>
+      </div>
 
       {results?.map(item => (
         <Fragment>

@@ -1,24 +1,24 @@
 import {
+  render,
   Button,
   Container,
-  Inline,
-  render,
+  Dropdown,
   VerticalSpace,
   Text,
   Columns,
-  Dropdown,
   Textbox,
   SearchTextbox,
   useInitialFocus,
   IconHyperlink16,
 } from '@create-figma-plugin/ui'
 import { h, JSX, Fragment } from 'preact'
-import { useCallback, useState, useMemo, useEffect } from 'preact/hooks'
-import { once, emit, saveSettingsAsync } from '@create-figma-plugin/utilities'
+import { useCallback, useState, useRef, useEffect } from 'preact/hooks'
+import { once, emit } from '@create-figma-plugin/utilities'
 import { AddStringsHandler, SaveStringsToStorage } from './types'
 import * as mobileStrings from './mobileStrings.json'
 import getJsonFile from './fetch'
-import styles from './styles.css'
+import styles, { json } from './styles.css'
+import { validateSelection, SelectionState } from './selection'
 
 function Plugin() {
   const style = {
@@ -53,16 +53,35 @@ function Plugin() {
   };
   
   const data = Object.entries(mobileStrings.en);
-  const [message, setMessage] = useState('')
+  const urlInputRef = useRef<HTMLInputElement>(null);
+  const [jsonUrl, setJsonUrl] = useState<string>('')
+  const [message, setMessage] = useState<string>('')
   const [value, setValue] = useState<string>('')
   const [results, setResults] = useState<Array<any>>([]);
-  const [jsonValue, setJsonValue] = useState('https://raw.githubusercontent.com/dusan990/Copy-manager/main/src/json.json');
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const handleAddStrings = useCallback(
-    function () {
+    function() {
       emit<AddStringsHandler>('UPDATEFIGMA')
     },[]
   )
+
+  // function fetchData() {
+  //   return new Promise((resolve, reject) => {
+  //     resolve(emit<AddStringsHandler>('UPDATEFIGMA'))
+  //   })
+  // }
+  
+  // const handleAddStrings = async () => {
+  //   setIsDisabled(true);
+  //   await fetchData();
+  //   setIsDisabled(false);
+  // }
+    
+
+  function handleJsonInput(jsonValue: string) {
+    setJsonUrl(jsonValue)
+  }
   
   const search = () => {
     setResults([])
@@ -83,8 +102,13 @@ function Plugin() {
       <VerticalSpace space="large" />
 
       <div className={styles.json}>
-        <Textbox placeholder="JSON file link" value={jsonValue} icon={<IconHyperlink16 />} />
-        <Button onClick={(e:any) => getJsonFile(jsonValue)} secondary>Upload</Button>
+        <Textbox 
+            placeholder="JSON file link" 
+            value={jsonUrl} 
+            onValueInput={handleJsonInput} 
+            icon={<IconHyperlink16 /> }
+        />
+        <Button onClick={e => getJsonFile(jsonUrl)} secondary>Upload</Button>
       </div>
       {/* <Dropdown disabled onChange={handleDropdown} options={dropdownOption} value="foo" /> */}
       
@@ -114,10 +138,13 @@ function Plugin() {
       
       <VerticalSpace space="large" />
 
-      
-      <Button fullWidth onClick={handleAddStrings}>
-        Update strings
-      </Button>
+      <Button 
+        fullWidth
+        onClick={handleAddStrings}
+        // disabled={isDisabled}
+      >Update strings</Button>
+
+      <VerticalSpace space="small" />
       <div>{message}</div>
       
     </Container>

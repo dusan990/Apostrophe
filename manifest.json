@@ -1,0 +1,10 @@
+{
+  "api": "1.0.0",
+  "editorType": [
+    "figma"
+  ],
+  "id": "copy-manager",
+  "name": "Copy Manager",
+  "main": "build/main.js",
+  "ui": "build/ui.js"
+}

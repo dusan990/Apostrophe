@@ -1,0 +1,30 @@
+input, textarea {
+   padding: 0;
+   border: 0;
+   outline: 0;
+   margin: 0;
+   padding: 8px;
+   /* -webkit-appearance: none; */
+   font: 400 12px Inter, sans-serif;
+   background: var(--figma-color-bg);
+   color: var(--figma-color-text);
+}
+
+input:focus {
+   box-shadow: inset 0px 0px 0px 2px #18a0fb;
+}
+
+#create:focus {
+	box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.url {
+	/* background: var(--figma-color-bg-pressed); */
+	background: var(--figma-color-bg);
+   color: var(--figma-color-text);
+	/* color: var(--figma-color-text-secondary) */
+}
+
+svg {
+   color: var(--figma-color-text);
+}

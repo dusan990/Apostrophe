@@ -1,0 +1,28 @@
+// https://api.npoint.io/09328c07915381c5d9e7
+// https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_MobileAppProject.json
+// https://raw.githubusercontent.com/dusan990/Copy-manager/main/src/mobileStrings.json
+
+// all languages
+// https://jsonkeeper.com/b/X6SV
+
+// simple
+// https://www.jsonkeeper.com/b/BYQX
+
+// EN mobile
+// https://www.jsonkeeper.com/b/XGUH
+// WEB
+// https://www.jsonkeeper.com/b/OQKD
+
+
+//
+
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_MobileAppProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_WebAppProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_PublicPages.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_PlatformProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_FeedbackAppProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_KioskProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_CustomizationCenterProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_ManagementCenterProject.json
+https://api-customization.s3.eu-central-1.amazonaws.com/public/i18n/4JSfOdgjmH5xXv_TabletAppProject.json
+
